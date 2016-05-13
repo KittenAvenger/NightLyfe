@@ -12,4 +12,8 @@ public class Intro extends AppCompatActivity {
     }
 
     //  Just a test comment
+
+    /*
+    Another test comment, hope this stupid ass shit finally fucking works
+     */
 }
