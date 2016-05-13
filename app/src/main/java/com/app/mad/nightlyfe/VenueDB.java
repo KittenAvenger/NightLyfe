@@ -3,6 +3,7 @@ package com.app.mad.nightlyfe;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -12,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class VenueDB extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "VenueMusic.db";
-    //public static final String VENUES_TABLE_NAME = "contacts";
+    public static final String VENUES_TABLE_NAME = "venues";
     public static final String VENUES_COLUMN_ID = "id";
     public static final String VENUES_COLUMN_VENUE_NAME = "venue_name";
     public static final String VENUES_COLUMN_GENRE = "genre";
@@ -23,7 +24,7 @@ public class VenueDB extends SQLiteOpenHelper {
 
     public VenueDB(Context context)
     {
-        super(context, DATABASE_NAME , null, 1);
+        super(context, DATABASE_NAME, null, 1);
     }
 
     @Override
@@ -36,8 +37,16 @@ public class VenueDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        db.execSQL("DROP TABLE IF EXISTS venues");
+        onCreate(db);
     }
+
+    public int numberOfRows(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int numRows = (int) DatabaseUtils.queryNumEntries(db, VENUES_TABLE_NAME);
+        return numRows;
+    }
+
 
     public boolean insertVenue  (String venue_name, String genre, String opening_hours, int entrance_fee,String address, String crowded)
     {
