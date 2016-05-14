@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NightLyfe</string>
+    <string name="title_activity_my_array_adapter">MyArrayAdapter</string>
 </resources>

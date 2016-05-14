@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by Dennis on 2016-05-13.
@@ -21,6 +22,9 @@ public class VenueDB extends SQLiteOpenHelper {
     public static final String VENUES_COLUMN_ENTRANCE_FEE= "entrance_fee";
     public static final String VENUES_COLUMN_ADDRESS = "address";
     public static final String VENUES_COLUMN_CROWDED = "crowded";
+    public static final String VENUES_COLUMN_TRACKLIST = "tracklist";
+
+    private static final String TAG = "VenueDB";
 
     public VenueDB(Context context)
     {
@@ -31,7 +35,7 @@ public class VenueDB extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
                 "create table venues " +
-                        "(id integer primary key, venue_name text,genre text,opening_hours text, entrance_fee integer, address text, crowded text)"
+                        "(id integer primary key, venue_name text,genre text,opening_hours text, entrance_fee integer, address text, crowded text, tracklist text)"
         );
     }
 
@@ -41,6 +45,21 @@ public class VenueDB extends SQLiteOpenHelper {
         onCreate(db);
     }
 
+    public void createTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL(
+                "create table venues " +
+                        "(id integer primary key, venue_name text,genre text,opening_hours text, entrance_fee integer, address text, crowded text, tracklist text)"
+        );
+    }
+
+    public void dropTable(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DROP TABLE IF EXISTS venues");
+        Log.d(TAG, "table deleted");
+
+    }
+
     public int numberOfRows(){
         SQLiteDatabase db = this.getReadableDatabase();
         int numRows = (int) DatabaseUtils.queryNumEntries(db, VENUES_TABLE_NAME);
@@ -48,7 +67,7 @@ public class VenueDB extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertVenue  (String venue_name, String genre, String opening_hours, int entrance_fee,String address, String crowded)
+    public boolean insertVenue(String venue_name, String genre, String opening_hours, int entrance_fee, String address, String crowded, String tracklist)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -58,14 +77,36 @@ public class VenueDB extends SQLiteOpenHelper {
         contentValues.put("entrance_fee", entrance_fee);
         contentValues.put("address", address);
         contentValues.put("crowded", crowded);
+        contentValues.put("tracklist", tracklist);
         db.insert("venues", null, contentValues);
         return true;
     }
 
-    public Cursor getData(int id){
+    public Cursor getData(String genre){
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from venues where id="+id+"", null );
-        return res;
+        Cursor res = null;
+
+        try {
+            res = db.rawQuery( "select * from venues where genre='"+genre+"'", null );
+            return res;
+        }
+        catch(Exception e){
+            return res = null;
+        }
+
+    }
+
+    public Cursor getCloseLocations(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res = null;
+
+        try {
+            res = db.rawQuery( "select venue_name, genre, address from venues group by venue_name", null );
+            return res;
+        }
+        catch(Exception e){
+            return res = null;
+        }
     }
 
 }
