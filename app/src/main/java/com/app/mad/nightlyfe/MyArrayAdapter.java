@@ -37,8 +37,15 @@ public class MyArrayAdapter extends ArrayAdapter<Venues> {
 
         // Get the reference to the two TextViews in the message layout and set them
         // to the time and message string respectively
-        TextView timeView = (TextView) messageView.findViewById(R.id.messageTextView);
+        TextView timeView = (TextView) messageView.findViewById(R.id.venueName);
         timeView.setText(venues.get(position).getVenueName());
+
+     /*   TextView addressField = (TextView) messageView.findViewById(R.id.addressField);
+          addressField.setText(venues.get(position).getAddress());
+     */
+
+        /*TextView entranceField = (TextView) messageView.findViewById(R.id.entranceField);
+        entranceField.setText(venues.get(position).getEntrance_fee());*/
 
 
         return messageView;

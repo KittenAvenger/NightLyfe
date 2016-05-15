@@ -12,8 +12,10 @@
         android:id="@+id/searchField"
         android:inputType="text"
         android:hint="Search genre"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignBottom="@+id/searchButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:password="false" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -25,7 +27,7 @@
         android:id="@+id/venueListLayout">
 
         <ListView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/venueList"
             android:layout_weight="1" />
@@ -37,7 +39,7 @@
         android:text="Search"
         android:id="@+id/searchButton"
         android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignRight="@+id/searchField"
+        android:layout_alignEnd="@+id/searchField" />
 
 </RelativeLayout>

@@ -7,14 +7,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 public class Intro extends AppCompatActivity implements View.OnClickListener {
 
-    ArrayList<String> listItems=new ArrayList<String>();
+    // --Commented out by Inspection (2016-05-15 01:04):ArrayList<String> listItems=new ArrayList<String>();
     Button searchButton;
     EditText searchField;
     ListView venueList;
@@ -41,7 +40,7 @@ public class Intro extends AppCompatActivity implements View.OnClickListener {
         mAdapter = new MyArrayAdapter(this, venues);
 
         // Set the ListView's adapter to be the adapter that we just constructed.
-        venueList.setAdapter((ListAdapter) mAdapter);
+        venueList.setAdapter(mAdapter);
 
         db = new VenueDB(this);
 
@@ -56,8 +55,6 @@ public class Intro extends AppCompatActivity implements View.OnClickListener {
         db.insertVenue("Pustervik", "Indie","17.00-03.00", 120, "Järntorgsgatan 12", "highly crowded", "https://open.spotify.com/user/spotify/playlist/4dJHrPYVdKgaCE3Lxrv1MZ" );
         db.insertVenue("Sticky Fingers", "Indie", "21.00-04.00", 60, "Kaserntorget 7", "medium crowded", "https://open.spotify.com/user/spotify/playlist/0lbtgFu3JNKX77J5YOpW7n");
         db.insertVenue("Nefertiti", "Jazz", "17.00-01.00", 100, "Hvitfeldtsplatsen 6", "lightly crowded", "https://open.spotify.com/user/guardianmusic/playlist/35i05dxUnfnU0ulnimZh3V");
-
-
 
 
       //  TextView venueName = (TextView) findViewById(R.id.venueName);
@@ -84,21 +81,21 @@ public class Intro extends AppCompatActivity implements View.OnClickListener {
                     Cursor rs = getVenues(messString);
 
                     if(rs.getCount() <= 0){
-                        venues.add(new Venues("Sorry no matches found", null, null));
+                        venues.add(new Venues("Sorry no matches found", null, null, 0));
                     }
 
                     else {
-                        while (rs.isAfterLast() == false) {
+                        while (!rs.isAfterLast()) {
                             venues.add(createVenue(rs));
                             rs.moveToNext();
                         }
                     }
                 ArrayList<Venues> vens = closeVenues();
-                    int size = closeVenues().size();
+                int size = closeVenues().size();
 
-                    for(int i = 0; i < size; i++){
-                        Log.d("Intro", vens.get(i).getAddress() + " " + vens.get(i).getGenre() + " " + vens.get(i).getVenueName());
-                    }
+                for(int i = 0; i < size; i++){
+                    Log.d("Intro", vens.get(i).getAddress() + " " + vens.get(i).getGenre() + " " + vens.get(i).getVenueName());
+                }
 
 
                     // Notify the adapter that the data has changed due to the addition
@@ -112,7 +109,7 @@ public class Intro extends AppCompatActivity implements View.OnClickListener {
                 }
 
                 else{
-                    venues.add(new Venues("Please type in a genre", null, null));
+                    venues.add(new Venues("Please type in a genre", null, null, 0));
                     mAdapter.notifyDataSetChanged();
                     searchField.setText("");
                 }
@@ -139,15 +136,16 @@ public class Intro extends AppCompatActivity implements View.OnClickListener {
         String venue = rs.getString(rs.getColumnIndex(VenueDB.VENUES_COLUMN_VENUE_NAME));
         String genre = rs.getString(rs.getColumnIndex(VenueDB.VENUES_COLUMN_GENRE));
         String address = rs.getString(rs.getColumnIndex(VenueDB.VENUES_COLUMN_ADDRESS));
+        int entrance_fee = rs.getInt(rs.getColumnIndex(VenueDB.VENUES_COLUMN_ENTRANCE_FEE));
 
-        return new Venues(venue, genre, address);
+        return new Venues(venue, genre, address, entrance_fee);
     }
 
     public ArrayList<Venues> closeVenues(){
         ArrayList<Venues> vens = new ArrayList<Venues>();
         Cursor rs = db.getCloseLocations();
         rs.moveToFirst();
-        while (rs.isAfterLast() == false) {
+        while (!rs.isAfterLast()) {
             vens.add(createVenue(rs));
             rs.moveToNext();
         }

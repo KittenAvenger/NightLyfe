@@ -101,7 +101,7 @@ public class VenueDB extends SQLiteOpenHelper {
         Cursor res = null;
 
         try {
-            res = db.rawQuery( "select venue_name, genre, address from venues group by venue_name", null );
+            res = db.rawQuery( "select venue_name, genre, address, entrance_fee from venues group by venue_name", null );
             return res;
         }
         catch(Exception e){
